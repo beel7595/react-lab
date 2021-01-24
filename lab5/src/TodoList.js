@@ -1,11 +1,12 @@
-import React, { Component } from "react";
+import React, {useState} from "react";
 import List from "@material-ui/core/List";
 import TextField from "@material-ui/core/TextField";
-import { withStyles } from "@material-ui/core/styles";
 import TodoListItem from "./TodoListItem";
 import { nanoid } from "nanoid";
 
-const styles = (theme) => ({
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     color: "white",
@@ -31,29 +32,27 @@ const styles = (theme) => ({
       margin: theme.spacing(1),
     },
   },
-});
+}));
 
-class TodoList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      todos: [
-        { id: 0, task: "Home work", status: "pending" },
-        { id: 2, task: "Lunch", status: "done" },
-        { id: 1, task: "Dinner", status: "pending" },
-      ],
-    };
-  }
 
-  handleDeleteItem = (id) => () => {
-    const newTodos = this.state.todos.filter((todo) => {
+export default function TodoList()  {
+  const classes = useStyles();
+  const [todos,setTodos] = useState([
+    { id: 0, task: "Home work", status: "pending" },
+    { id: 2, task: "Lunch", status: "done" },
+    { id: 1, task: "Dinner", status: "pending" },
+  ]);
+  
+
+  const handleDeleteItem = (id) => () => {
+    const newTodos = todos.filter((todo) => {
       return todo.id !== id;
     });
-    this.setState({ todos: newTodos });
+    setTodos(newTodos);
   };
 
-  handleToggle = (id) => () => {
-    const newTodos = this.state.todos.map((todo) => {
+  const handleToggle = (id) => () => {
+    const newTodos = todos.map((todo) => {
       if (todo.id === id) {
         return {
           ...todo,
@@ -63,27 +62,23 @@ class TodoList extends Component {
         return todo;
       }
     });
-    this.setState({ todos: newTodos });
+    setTodos(newTodos);
   };
 
-  handleKeyDown = (e) => {
+  const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
-      this.setState({
-        todos: [
-          ...this.state.todos,
+      setTodos([
+          ...todos,
           { id: nanoid(10), task: e.target.value, status: "pending" },
-        ],
-      });
+        ]);
+  
       e.target.value = "";
     }
   };
-
-  render() {
-    const { classes } = this.props;
     return (
       <div>
         <TextField
-          onKeyDown={this.handleKeyDown}
+          onKeyDown={handleKeyDown}
           className={classes.root}
           id="outlined-basic"
           label="Outlined"
@@ -91,20 +86,18 @@ class TodoList extends Component {
         />
 
         <List className={classes.root}>
-          {this.state.todos.map((todo) => {
+          {todos.map((todo) => {
             return (
               <TodoListItem
                 todo={todo.task}
                 id={todo.id}
                 status={todo.status}
-                handleDelete={this.handleDeleteItem}
-                handToggle={this.handleToggle}
+                handleDelete={handleDeleteItem}
+                handToggle={handleToggle}
               ></TodoListItem>
             );
           })}
         </List>
       </div>
     );
-  }
 }
-export default withStyles(styles)(TodoList);
