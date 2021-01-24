@@ -6,20 +6,18 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { actions } from "./redux/actions/todos";
 
-export default function TodoListItem({
-  todo,
-  id,
-  status,
-  handleDelete,
-  handToggle,
-}) {
+function TodoListItem({ todo, id, status, deleteTodo, toggleTodo }) {
   return (
     <ListItem key={id} role={undefined} dense button>
       <ListItemIcon>
         <Checkbox
-          onClick={handToggle(id)}
+          onClick={() => {
+            toggleTodo(id);
+          }}
           edge="start"
           checked={status === "done"}
           tabIndex={-1}
@@ -27,15 +25,31 @@ export default function TodoListItem({
           inputProps={{ "aria-labelledby": id }}
         ></Checkbox>
       </ListItemIcon>
-      <Link style={{textDecoration:'none',color:"white"}} to={`/todo/${id}`}>
-      <ListItemText id={id} primary={todo} />
+      <Link
+        style={{ textDecoration: "none", color: "white" }}
+        to={`/todo/${id}`}
+      >
+        <ListItemText id={id} primary={todo} />
       </Link>
-      
+
       <ListItemSecondaryAction>
-        <IconButton edge="end" aria-label="comments" onClick={handleDelete(id)}>
+        <IconButton
+          edge="end"
+          aria-label="comments"
+          onClick={() => {
+            deleteTodo(id);
+          }}
+        >
           <DeleteIcon />
         </IconButton>
       </ListItemSecondaryAction>
     </ListItem>
   );
 }
+
+const mapActionToProps = {
+  deleteTodo: actions.deleteTodo,
+  toggleTodo: actions.toggleTodo,
+};
+
+export default connect(null, mapActionToProps)(TodoListItem);
