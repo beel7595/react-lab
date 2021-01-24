@@ -6,6 +6,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+import {Link} from "react-router-dom";
 
 export default function TodoListItem({
   todo,
@@ -15,9 +16,10 @@ export default function TodoListItem({
   handToggle,
 }) {
   return (
-    <ListItem key={id} role={undefined} dense button onClick={handToggle(id)}>
+    <ListItem key={id} role={undefined} dense button>
       <ListItemIcon>
         <Checkbox
+          onClick={handToggle(id)}
           edge="start"
           checked={status === "done"}
           tabIndex={-1}
@@ -25,7 +27,10 @@ export default function TodoListItem({
           inputProps={{ "aria-labelledby": id }}
         ></Checkbox>
       </ListItemIcon>
+      <Link style={{textDecoration:'none',color:"white"}} to={`/todo/${id}`}>
       <ListItemText id={id} primary={todo} />
+      </Link>
+      
       <ListItemSecondaryAction>
         <IconButton edge="end" aria-label="comments" onClick={handleDelete(id)}>
           <DeleteIcon />

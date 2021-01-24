@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+
 import List from "@material-ui/core/List";
 import TextField from "@material-ui/core/TextField";
 import TodoListItem from "./TodoListItem";
-import { nanoid } from "nanoid";
 
+import { nanoid } from "nanoid";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,46 +35,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function TodoList()  {
+export default function TodoList(
+  {
+    todos,
+    handleDeleteItem,
+    handleKeyDown,
+    handleToggle
+  }
+)  {
   const classes = useStyles();
-  const [todos,setTodos] = useState([
-    { id: 0, task: "Home work", status: "pending" },
-    { id: 2, task: "Lunch", status: "done" },
-    { id: 1, task: "Dinner", status: "pending" },
-  ]);
-  
-
-  const handleDeleteItem = (id) => () => {
-    const newTodos = todos.filter((todo) => {
-      return todo.id !== id;
-    });
-    setTodos(newTodos);
-  };
-
-  const handleToggle = (id) => () => {
-    const newTodos = todos.map((todo) => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          status: todo.status === "pending" ? "done" : "pending",
-        };
-      } else {  
-        return todo;
-      }
-    });
-    setTodos(newTodos);
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.keyCode === 13) {
-      setTodos([
-          ...todos,
-          { id: nanoid(10), task: e.target.value, status: "pending" },
-        ]);
-  
-      e.target.value = "";
-    }
-  };
+ 
     return (
       <div>
         <TextField
@@ -89,6 +59,7 @@ export default function TodoList()  {
           {todos.map((todo) => {
             return (
               <TodoListItem
+                key={nanoid(10)}
                 todo={todo.task}
                 id={todo.id}
                 status={todo.status}
