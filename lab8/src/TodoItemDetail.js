@@ -8,7 +8,8 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { useParams } from "react-router-dom";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
+import { selectTodos } from "./redux/slices/todosSlice";
 
 const useStyles = makeStyles({
   root: {
@@ -19,10 +20,10 @@ const useStyles = makeStyles({
   },
 });
 
-function TodoItemDetail({ todos }) {
+function TodoItemDetail(props) {
   const classes = useStyles();
   let { id } = useParams();
-
+  const todos = useSelector(selectTodos);
   const todo = todos.filter((todo) => {
     return todo.id === parseInt(id);
   })[0];
@@ -56,10 +57,4 @@ function TodoItemDetail({ todos }) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    todos: state.todos,
-  };
-};
-
-export default connect(mapStateToProps, null)(TodoItemDetail);
+export default TodoItemDetail;

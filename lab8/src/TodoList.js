@@ -4,8 +4,8 @@ import TodoListItem from "./TodoListItem";
 
 import { nanoid } from "nanoid";
 import { makeStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
-import { actions } from "./redux/actions/todos";
+import { useSelector, useDispatch } from "react-redux";
+import { addTodo, selectTodos } from "./redux/slices/todosSlice";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,12 +35,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TodoList({ todos, addTodo, tollgeTodo, deleteTodo }) {
+function TodoList(props) {
   const classes = useStyles();
-
+  const dispatch = useDispatch();
+  const todos = useSelector(selectTodos);
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
-      addTodo(e.target.value);
+      dispatch(addTodo(e.target.value));
       e.target.value = "";
     }
   };
@@ -71,15 +72,4 @@ function TodoList({ todos, addTodo, tollgeTodo, deleteTodo }) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    todos: state.todos,
-  };
-};
-
-const mapActionToProps = {
-  addTodo: actions.addTodo,
-  // deleteTodo: actions.deleteTodo,
-  // tollgeTodo: actions.tollgeTodo,
-};
-export default connect(mapStateToProps, mapActionToProps)(TodoList);
+export default TodoList;

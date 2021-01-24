@@ -1,10 +1,9 @@
-import { useState } from "react";
 import "./App.css";
 import TodoList from "./TodoList";
 import TodoItemDetail from "./TodoItemDetail";
-import { nanoid } from "nanoid";
+
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
