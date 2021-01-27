@@ -18,10 +18,12 @@ function TodoListItem({ todo, id, status }) {
       <ListItemIcon>
         <Checkbox
           onClick={() => {
-            dispatch(toggleTodo(id));
+            dispatch(
+              toggleTodo({ id: id, task: todo, status: status ? false : true })
+            );
           }}
           edge="start"
-          checked={status === "done"}
+          checked={status}
           tabIndex={-1}
           disableRipple
           inputProps={{ "aria-labelledby": id }}
